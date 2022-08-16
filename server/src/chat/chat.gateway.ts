@@ -36,11 +36,17 @@ export class ChatGateway
     this.logger.log(`disconnected: ${socket.id} ${socket.nsp.name}`);
   }
 
-  @SubscribeMessage('send')
-  handleName(@MessageBody() data, @ConnectedSocket() socket: Socket) {
-    console.log(data);
-    socket.broadcast.emit('receive', `broad hello, ${data.name}`);
-    socket.emit('receive', `normal hello, ${data.name}`);
-    return data.name;
+  @SubscribeMessage('new_user')
+  handleNewUser(@MessageBody() data, @ConnectedSocket() socket: Socket) {
+    socket.broadcast.emit('new_chat', { msg: `${data}님이 입장하였습니다` });
+  }
+
+  @SubscribeMessage('submit_chat')
+  handleSubmitChat(
+    @MessageBody() data: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.broadcast.emit('new_chat', data);
+    socket.emit('new_chat', data);
   }
 }
