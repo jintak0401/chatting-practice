@@ -1,4 +1,10 @@
-import React, { FormEvent, ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  FormEvent,
+  ChangeEvent,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import useSocket from './hooks/useSocket';
 import { Socket } from 'socket.io-client';
 import './App.css';
@@ -9,10 +15,10 @@ function App() {
   const [messageList, setMessageList] = useState<
     { name: string; message: string }[]
   >([]);
-  const socket: Socket = useSocket();
+  const socket: Socket = useMemo(() => useSocket('chatting'), []);
 
-  const sendMessage = ({ preventDefault }: FormEvent<HTMLFormElement>) => {
-    preventDefault();
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     socket.emit('send', {
       name,
       message,
@@ -23,6 +29,7 @@ function App() {
 
   useEffect(() => {
     socket.on('receive', (message) => {
+      console.log(message);
       setMessageList([...messageList, message]);
     });
   }, []);
@@ -34,14 +41,14 @@ function App() {
   return (
     <div className="App">
       <section className="chat_list">
-        {messageList.map((item) => (
-          <div className="messagelist">
+        {messageList.map((item, idx) => (
+          <div key={`${item.message}${idx}`} className="messagelist">
             <p className="username">{item.name}</p>
             <p className="msg_text">{item.message}</p>
           </div>
         ))}
       </section>
-      <form className="chat_con" onSubmit={(e) => sendMessage(e)}>
+      <form className="chat_con" onSubmit={sendMessage}>
         <div className="chat_inputs">
           <input
             type="text"
