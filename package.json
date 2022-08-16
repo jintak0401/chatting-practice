@@ -1,7 +1,6 @@
 {
   "name": "chatting-practice",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/jintak0401/chatting-practice.git",
   "author": "jintak0401",
   "license": "MIT",
@@ -13,8 +12,14 @@
   "scripts": {
     "build:client": "yarn workspace client build",
     "start:client": "yarn workspace client start",
+
+    "build:server": "yarn workspace server build",
     "start:server": "yarn workspace server start",
+    "prod:server": "yarn workspace server start:prod",
     "dev:server": "yarn workspace server start:dev",
-    "start": "yarn workspace server start && yarn workspace client start"
+
+    "build": "yarn build:server && yarn build:client",
+
+    "start": "yarn build && yarn prod:server && yarn start:client"
   }
 }
