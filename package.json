@@ -1,7 +1,6 @@
 {
   "name": "chatting-practice",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/jintak0401/chatting-practice.git",
   "author": "jintak0401",
   "license": "MIT",
